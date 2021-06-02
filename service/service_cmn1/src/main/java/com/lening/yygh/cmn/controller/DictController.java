@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/cmn/dict")
 @Api(description = "数据字典接口")
-@CrossOrigin
+//@CrossOrigin
 public class DictController {
 
     @Resource
@@ -60,6 +60,13 @@ public class DictController {
     public Result importData(MultipartFile file) {
         dictService.importExcel(file);
         return Result.ok();
+    }
+
+    @ApiOperation(value = "根据dictCode获取下级节点")
+    @GetMapping(value = "/findByDictCode/{dictCode}")
+    public Result findByDictCode(@PathVariable String dictCode){
+        List<Dict> list = dictService.findByDictCode(dictCode);
+        return Result.ok(list);
     }
 
     //根据dictcode和value查询

@@ -8,6 +8,7 @@ import com.lening.yygh.cmn.mapper.DictMapper;
 import com.lening.yygh.cmn.service.DictService;
 import com.lening.yygh.model.cmn.Dict;
 import com.lening.yygh.vo.cmn.DictEeVo;
+import lombok.val;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -140,6 +141,13 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             Dict dict1 = baseMapper.selectOne(new QueryWrapper<Dict>().eq("parent_id", parentId).eq("value", value));
             return dict1.getName();
         }
+    }
+
+    @Override
+    public List<Dict> findByDictCode(String dictCode) {
+        Dict dict = this.getDictByDictCode(dictCode);
+        List<Dict> childDataByPid = this.findChildDataByPid(dict.getId());
+        return childDataByPid;
     }
 
     private Dict getDictByDictCode(String dictCode) {
