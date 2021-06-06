@@ -17,10 +17,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author 牛胜浩
@@ -137,6 +134,22 @@ public class HospitalServiceImpl implements HospitalService {
     }
 
     @Override
+    public List<Hospital> findByHosName(String hosname) {
+        return hospitalRepository.findHospitalByHosnameLike(hosname);
+    }
+
+    @Override
+    public Map<String, Object> item(String hoscode) {
+        Map<String,Object> result = new HashMap<>();
+        //医院详情
+        Hospital hospital = this.packHospital(this.getHospitalByHoscode(hoscode));
+        result.put("hospital", hospital);
+        result.put("bookingRule", hospital.getBookingRule());
+        hospital.setBookingRule(null);
+        return result;
+    }
+
+    @Override
     public Page<Hospital> selectPage(Integer page, Integer limit, HospitalQueryVo hospitalQueryVo) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createTime");
         //0为第一页
@@ -187,8 +200,10 @@ public class HospitalServiceImpl implements HospitalService {
      * 封装数据
      * @param hospital
      */
+    //获取查询list集合，遍历进行医院等级封装
     private Hospital packHospital(Hospital hospital) {
         String hostypeString = dictFeignClient.getName(DictEnum.HOSTYPE.getDictCode(),hospital.getHostype());
+        //查询省 市  地区
         String provinceString  = dictFeignClient.getName(hospital.getProvinceCode());
         String cityString   = dictFeignClient.getName(hospital.getCityCode());
         String districtString   = dictFeignClient.getName(hospital.getCityCode());

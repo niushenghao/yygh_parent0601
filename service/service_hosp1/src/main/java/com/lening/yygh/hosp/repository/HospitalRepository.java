@@ -1,8 +1,11 @@
 package com.lening.yygh.hosp.repository;
 
 import com.lening.yygh.model.hosp.Hospital;
+import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author 牛胜浩
@@ -12,4 +15,6 @@ import org.springframework.stereotype.Repository;
 public interface HospitalRepository extends MongoRepository<Hospital,String> {
 
     Hospital findHospitalByHoscode(String hoscode);
+
+    List<Hospital> findHospitalByHosnameLike(String hosname);
 }
