@@ -14,7 +14,7 @@ import java.util.List;
 public interface DictService extends IService<Dict> {
 
     //根据数据id查询子数据列表
-    List<Dict> findChildDataByPid(Long id);
+    List<Dict> findChildDataByPid(Long parentId);
 
     //导出数据字典接口
     void exportExcel(HttpServletResponse response);
@@ -23,7 +23,7 @@ public interface DictService extends IService<Dict> {
     void importExcel(MultipartFile file);
 
     //根据dictcode和value查询
-    String getDictName(String parentDictCode, String value);
+    String getDictName(String dictCode, String value);
 
     //根据dictCode获取下级节点
     List<Dict> findByDictCode(String dictCode);

@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface DictFeignClient {
     /**
      * 获取数据字典名称
-     * @param parentDictCode
+     * @param dictCode
      * @param value
      * @return
      */
-    @GetMapping(value = "/admin/cmn/dict/getName/{parentDictCode}/{value}")
-    String getName(@PathVariable("parentDictCode") String parentDictCode, @PathVariable("value") String value);
+    @GetMapping(value = "/admin/cmn/dict/getName/{dictCode}/{value}")
+    String getName(@PathVariable("dictCode") String dictCode, @PathVariable("value") String value);
 
     /**
      * 获取数据字典名称

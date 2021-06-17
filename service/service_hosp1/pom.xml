@@ -21,6 +21,12 @@
             <artifactId>service-cmn-client1</artifactId>
             <version>1.0</version>
         </dependency>
+        <!--rabbitmq消息队列-->
+        <dependency>
+            <groupId>com.lening</groupId>
+            <artifactId>rabbit_util</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>service_hosp</finalName>

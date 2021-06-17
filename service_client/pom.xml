@@ -14,6 +14,8 @@
     <version>1.0</version>
     <modules>
         <module>service-cmn-client1</module>
+        <module>service-user-client</module>
+        <module>service-hosp-client</module>
     </modules>
 
     <dependencies>

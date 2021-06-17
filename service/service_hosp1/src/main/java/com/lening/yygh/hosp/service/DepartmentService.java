@@ -14,10 +14,13 @@ import java.util.Map;
  */
 public interface DepartmentService {
 
+    //上传科室接口
     void saveDepartment(Map<String, Object> paramMap);
 
+    //查询科室接口
     Page<Department> getDepartment(int page, int limit, DepartmentQueryVo departmentQueryVo);
 
+    //删除科室接口
     void remove(String hoscode, String depcode);
 
     //根据医院编号，查询医院所有科室列表
@@ -25,4 +28,7 @@ public interface DepartmentService {
 
     //根据科室编号，和医院编号，查询科室名称
     String getDepName(String hoscode, String depcode);
+
+    //根据科室编号，和医院编号，查询科室
+    Department getDepartmentList(String hoscode, String depcode);
 }

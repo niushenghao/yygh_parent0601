@@ -34,13 +34,13 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     @Override
     @Cacheable(value = "dict",keyGenerator = "keyGenerator")
-    public List<Dict> findChildDataByPid(Long id) {
+    public List<Dict> findChildDataByPid(Long parentId) {
         /**
          * 我们是 QueryWrapper<Dict> queryWrapper = new QueryWrapper();
          * QueryWrapper queryWrapper = new QueryWrapper(Dict.class);
          */
         QueryWrapper<Dict> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("parent_id",id);
+        queryWrapper.eq("parent_id",parentId);
         /**
          * 我们的mapper继承了basemapper，用我们mapper完全可以
          * 但是我们也继承mp的实现类，mp的实现类其实已经引入了basemapper，可以直接使用
@@ -56,7 +56,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
              * 怎么样判断有没有孩子
              * 用这个id去数据按照fid去查询，结果集list大于0就有孩子，否则就没有孩子
              */
-            dict.setHasChildren(isHasChildren(id));
+            dict.setHasChildren(isHasChildren(parentId));
         }
         return list;
     }
@@ -126,20 +126,27 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     @Override
-    public String getDictName(String parentDictCode, String value) {
-        //如果value能唯一定位数据字典，parentDictCode可以传空，例如：省市区的value值能够唯一确定
+    public String getDictName(String dictCode, String value) {
         //如果dictCode为空，直接根据value查询
-        if (StringUtils.isEmpty(parentDictCode)){
+        if(StringUtils.isEmpty(dictCode)) {
             //直接根据value查询
-            Dict dict = baseMapper.selectOne(new QueryWrapper<Dict>().eq("value", value));
-            return dict.getName();
-        }else {
-            //如果dictCode不为空，根据dictCode和value查询
-            Dict parentDict = this.getDictByDictCode(parentDictCode);
-            Long parentId = parentDict.getId();
+            QueryWrapper<Dict> wrapper = new QueryWrapper<>();
+            wrapper.eq("value",value);
+            Dict dict = baseMapper.selectOne(wrapper);
+            if (StringUtils.isEmpty(dictCode)){
+                return null;
+            }else {
+                return dict.getName();
+            }
+        } else {//如果dictCode不为空，根据dictCode和value查询
+            //根据dictcode查询dict对象，得到dict的id值
+            Dict codeDict = this.getDictByDictCode(dictCode);
+            Long parent_id = codeDict.getId();
             //根据parent_id和value进行查询
-            Dict dict1 = baseMapper.selectOne(new QueryWrapper<Dict>().eq("parent_id", parentId).eq("value", value));
-            return dict1.getName();
+            Dict finalDict = baseMapper.selectOne(new QueryWrapper<Dict>()
+                    .eq("parent_id", parent_id)
+                    .eq("value", value));
+            return finalDict.getName();
         }
     }
 

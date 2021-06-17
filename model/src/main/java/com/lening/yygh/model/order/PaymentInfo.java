@@ -20,7 +20,7 @@ import java.util.Date;
 @Data
 @ApiModel(description = "PaymentInfo")
 @TableName("payment_info")
-public class PaymentInfo extends BaseEntity {
+public class 	PaymentInfo extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 

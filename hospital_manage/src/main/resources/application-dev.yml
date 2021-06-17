@@ -30,6 +30,7 @@ spring:
     username: root
     password: root
     hikari:
+      keepAlive-timeout: 100000
       connection-test-query: SELECT 1
       connection-timeout: 60000
       idle-timeout: 500000

@@ -27,15 +27,15 @@ public class DictController {
     @Resource
     private DictService dictService;
 
-    @GetMapping("/findChildData/{id}")
+    @GetMapping("/findChildData/{parentId}")
     @ApiOperation(value = "根据数据id查询子数据列表")
-    public Result findChildData(@PathVariable Long id){
+    public Result findChildData(@PathVariable Long parentId){
         /**
          * 我们按照这个id去数据库查询对应的父id，也就是pid，所以需要调节查询
          * 调节可以在这里写，可以可以去service实现类里面写，
          * 医院设置在controller里面写的
          */
-        List<Dict> list = dictService.findChildDataByPid(id);
+        List<Dict> list = dictService.findChildDataByPid(parentId);
         return Result.ok(list);
     }
 
@@ -70,24 +70,19 @@ public class DictController {
     }
 
     //根据dictcode和value查询
-    @ApiOperation(value = "获取数据字典名称")
-    @GetMapping(value = "/getName/{parentDictCode}/{value}")
-    public String getName(@ApiParam(name = "parentDictCode", value = "上级编码", required = true)
-                              @PathVariable("parentDictCode") String parentDictCode,
-
-                          @ApiParam(name = "value", value = "值", required = true)
-                              @PathVariable("value") String value){
-        String dictName = dictService.getDictName(parentDictCode, value);
+    @GetMapping("getName/{dictCode}/{value}")
+    public String getName(@PathVariable String dictCode,
+                          @PathVariable String value) {
+        String dictName = dictService.getDictName(dictCode,value);
         return dictName;
     }
 
     //根据value查询
     @ApiOperation(value = "获取数据字典名称")
     @ApiImplicitParam(name = "value", value = "值", required = true, dataType = "Long", paramType = "path")
-    @GetMapping(value = "/getName/{value}")
-    public String getName(
-            @ApiParam(name = "value", value = "值", required = true)
-            @PathVariable("value") String value) {
-        return dictService.getDictName("",value);
+    @GetMapping("getName/{value}")
+    public String getName(@PathVariable String value) {
+        String dictName = dictService.getDictName("",value);
+        return dictName;
     }
 }
